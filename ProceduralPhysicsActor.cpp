@@ -16,19 +16,22 @@ void AProceduralPhysicsActor::SetupMesh()
 	// 1. Call base class logic first to generate procedural geometry
 	Super::SetupMesh();
 
-	// 2. Enable physics on generated procedural components[cite: 2]
-	if (PrimaryProceduralMesh)
+	// 2. Enable physics on generated procedural components, but only in gameplay mode
+	if (GetWorld() && GetWorld()->IsGameWorld())
 	{
-		PrimaryProceduralMesh->SetSimulatePhysics(true);
-		PrimaryProceduralMesh->SetCollisionProfileName(TEXT("PhysicsActor"));
-	}
-
-	for (UProceduralMeshComponent* Comp : ProceduralMeshComps)
-	{
-		if (Comp)
+		if (PrimaryProceduralMesh)
 		{
-			Comp->SetSimulatePhysics(true);
-			Comp->SetCollisionProfileName(TEXT("PhysicsActor"));
+			PrimaryProceduralMesh->SetSimulatePhysics(true);
+			PrimaryProceduralMesh->SetCollisionProfileName(TEXT("PhysicsActor"));
+		}
+
+		for (UProceduralMeshComponent* Comp : ProceduralMeshComps)
+		{
+			if (Comp)
+			{
+				Comp->SetSimulatePhysics(true);
+				Comp->SetCollisionProfileName(TEXT("PhysicsActor"));
+			}
 		}
 	}
 }
